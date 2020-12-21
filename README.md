@@ -1,6 +1,17 @@
 ﻿# Marlin-Firmware-BTT-SKR-Mini-Hemera
 
 3D Printer Firmware for Creality Ender 3 V2 with BIGTREETECH SKR Mini E3 V2.0 Boards and Hemera Extruder based on Marlin Firmware Bugfix 2.0
+BLTouch Enabled
+
+## IDE
+Use VSCode (https://code.visualstudio.com/) with platform.io extention (https://platformio.org/install/ide?install=vscode)
+
+## Setup Environment
+Change default_envs on platformio.ini line 21
+
+```cpp
+default_envs = STM32F103RC_btt
+```
 
 ## Display with Stock Ender 3 V2 LCD
 ### Define secondary serial port
