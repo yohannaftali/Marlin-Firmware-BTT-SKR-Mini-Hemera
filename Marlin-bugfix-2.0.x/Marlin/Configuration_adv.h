@@ -2370,7 +2370,10 @@
 
   #if AXIS_IS_TMC(E0)
     //#define E0_CURRENT      800
-    // Hemera Extruder Motor
+
+    // Hemera  Extruder Max Rating: 1.33A = 1330 mA
+    // RMS rating = 1330 mA / 1.414 = 940 mA
+    // Hemera Extruder Motor set current to 940 ma
     #define E0_CURRENT      940
     #define E0_MICROSTEPS    16
     #define E0_RSENSE         0.11
@@ -2554,7 +2557,7 @@
    * M912 - Clear stepper driver overtemperature pre-warn condition flag.
    * M122 - Report driver parameters (Requires TMC_DEBUG)
    */
-  //#define MONITOR_DRIVER_STATUS
+  #define MONITOR_DRIVER_STATUS
 
   #if ENABLED(MONITOR_DRIVER_STATUS)
     #define CURRENT_STEP_DOWN     50  // [mA]

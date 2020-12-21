@@ -117,18 +117,6 @@
 
 #define USB_CONNECT_INVERTING              false
 
-
-/**
- *        Ender 3 V2 display                         SKR Mini E3 V2.0
- *                _____                                     _____
- *      White 5V | 1 2 | GND - Black                    5V | 1 2 | GND
- * Pu(BTN_E1) A  | 3 4 | B (BTN_E2) Grey    (BTN_EN1) PB15 | 3 4 | PB8 (BTN_E2)
- *    Green BEEP | 5 6   ENT (BTN_ENC) Blue           PB9  | 5 6   RX1
- * O(SKR_RX1) TX | 7 8 | RX (SKR_TX1) Yellow         RESET | 7 8 | TX1
- *      Brown NC | 9 10| NC Red              (BEEPER) PA15 | 9 10| PB5  (BTN_ENC)
- *                -----                                     -----
- *                EXP1                                      EXP1
- */
 /**
  *        Ender 3 V2 display                                SKR Mini E3 V2.0
  *                _____                                           _____
