@@ -6,19 +6,31 @@ BLTouch Enabled
 ## IDE
 Use VSCode (https://code.visualstudio.com/) with platform.io extention (https://platformio.org/install/ide?install=vscode)
 
-## Setup Environment
-Change default_envs on platformio.ini line 21
-
+## Setup Environments
+### Default environements
+Change default_envs on platformio.ini
 ```cpp
 default_envs = STM32F103RC_btt
 ```
+### Define motherboard
+Define motherboard to BOARD_BTT_SKR_MINI_E3_V2_0 in configuration.h
+
+```cpp
+#define MOTHERBOARD BOARD_BTT_SKR_MINI_E3_V2_0
+```
 
 ## Display with Stock Ender 3 V2 LCD
+### Define LCD
+Define display to DWIN_CREALITY_LCD and comment out other display
+```cpp
+#define DWIN_CREALITY_LCD
+```
 ### Define secondary serial port
-Set secondary serial port 2 to 1 in configuration.h
+Define secondary serial port 2 to 1 in configuration.h
 ```cpp
 #define SERIAL_PORT_2 1
 ```
+
 ### Setup pin
 Added code on file on Marlin/src/pins/stm32f1/pins_BTT_SKR_MINI_E3_common.h
 
