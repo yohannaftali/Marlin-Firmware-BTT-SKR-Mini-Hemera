@@ -110,6 +110,7 @@
  * Currently Ethernet (-2) is only supported on Teensy 4.1 boards.
  * :[-2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
  */
+// Use Creality Ender 3 V2 Stock LCD
 #define SERIAL_PORT_2 1
 
 /**
@@ -408,9 +409,11 @@
  *   998 : Dummy Table that ALWAYS reads 25°C or the temperature defined below.
  *   999 : Dummy Table that ALWAYS reads 100°C or the temperature defined below.
  */
+
+// Ender 3 V2 100k hotend thermistor
 //#define TEMP_SENSOR_0 1
 
-// Hemerea
+// E3D Hemerea 100k thermistor
 #define TEMP_SENSOR_0 5
 #define TEMP_SENSOR_1 0
 #define TEMP_SENSOR_2 0
@@ -497,20 +500,25 @@
     #define DEFAULT_Ki_LIST {   1.08,   1.08 }
     #define DEFAULT_Kd_LIST { 114.00, 114.00 }
   #else
-    // Ender 3 v2
+
+    // FIND YOUR OWN: "M303 C8 [E0] S200 U1" to run autotune on the bed at 200 degreesC for 8 cycles.
+
+    // Ender 3 v2 default value
     // #define DEFAULT_Kp 28.72
     // #define DEFAULT_Ki 2.62
     // #define DEFAULT_Kd 78.81
 
-    // Ender 3 V2 with Hemera
-    /*
-    Recv: #define DEFAULT_Kp 36.14
-    Recv: #define DEFAULT_Ki 3.52
-    Recv: #define DEFAULT_Kd 92.73
-    */
-    #define DEFAULT_Kp 36.14
-    #define DEFAULT_Ki 3.52
-    #define DEFAULT_Kd 92.73
+    // Ender 3 V2 with Hemera Hotend Heater
+    // PID Autotune command: M303 C8 [E0] S200 U1
+    // Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+    // Recv: #define DEFAULT_Kp 36.65
+    // Recv: #define DEFAULT_Ki 3.54
+    // Recv: #define DEFAULT_Kd 94.78
+    // Use M500 to save
+
+    #define DEFAULT_Kp 36.65
+    #define DEFAULT_Ki 3.54
+    #define DEFAULT_Kd 94.78
 
   #endif
 #endif // PIDTEMP
@@ -548,12 +556,24 @@
   //#define MIN_BED_POWER 0
   //#define PID_BED_DEBUG // Sends debug data to the serial port.
 
-  // Ender 3 V2
-  #define DEFAULT_bedKp 462.10
-  #define DEFAULT_bedKi 85.47
-  #define DEFAULT_bedKd 624.59
+  // Default Ender 3 V2
+  // #define DEFAULT_bedKp 462.10
+  // #define DEFAULT_bedKi 85.47
+  // #define DEFAULT_bedKd 624.59
 
-  // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
+  // FIND YOUR OWN: "M303 E-1 C8 S90 U1" to run autotune on the bed at 90 degreesC for 8 cycles.
+
+  // PID Autotune command: M303 E-1 C8 S90 U1
+  // Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+  // Recv: #define DEFAULT_bedKp 90.45
+  // Recv: #define DEFAULT_bedKi 16.84
+  // Recv: #define DEFAULT_bedKd 323.94
+  // Use M500 to save
+
+  #define DEFAULT_bedKp 90.45
+  #define DEFAULT_bedKi 16.84
+  #define DEFAULT_bedKd 323.94
+
 #endif // PIDTEMPBED
 
 #if EITHER(PIDTEMP, PIDTEMPBED)
@@ -689,6 +709,9 @@
  *          TMC5130, TMC5130_STANDALONE, TMC5160, TMC5160_STANDALONE
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'L6474', 'POWERSTEP01', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
  */
+
+// Ender 3 V2.0 with stock board use TMC 2208 driver type
+// BTT SKR Mini E3 V2.0 use TMC2209 for X, Y, Z and  E0
 #define X_DRIVER_TYPE  TMC2209
 #define Y_DRIVER_TYPE  TMC2209
 #define Z_DRIVER_TYPE  TMC2209
@@ -754,7 +777,7 @@
  */
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 93 }
 
-// Hemera
+// Hemera extruder motor use 409 steps per unit and need to be calibrated
 #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 409 }
 
 /**
