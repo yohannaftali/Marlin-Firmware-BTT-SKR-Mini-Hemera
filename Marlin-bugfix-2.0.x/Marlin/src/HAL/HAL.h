@@ -51,6 +51,11 @@
   #define PGMSTR(NAM,STR) const char NAM[] = STR
 #endif
 
+// DWIN on SKR Boards
+#ifndef strcat_P
+  #define strcat_P(a, b) strcat((a), (b))
+#endif
+
 inline void watchdog_refresh() {
   TERN_(USE_WATCHDOG, HAL_watchdog_refresh());
 }
