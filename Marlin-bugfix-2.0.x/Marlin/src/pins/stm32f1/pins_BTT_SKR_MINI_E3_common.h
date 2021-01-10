@@ -135,10 +135,10 @@
   #define BTN_EN1                           PB15
   #define BTN_EN2                           PB8
 
-  #ifndef BEEPER_PIN
-    #define BEEPER_PIN                      PA15
-    #undef SPEAKER
-  #endif
+  //#ifndef BEEPER_PIN
+   #define BEEPER_PIN                      PA15
+   //#undef SPEAKER
+  //#endif
 #endif
 
 /**
