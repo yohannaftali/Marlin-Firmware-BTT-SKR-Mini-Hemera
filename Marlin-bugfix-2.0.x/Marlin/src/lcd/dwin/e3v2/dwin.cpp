@@ -25,7 +25,7 @@
  */
 
 #include "../../../inc/MarlinConfigPre.h"
-#include "../../../gcode/gcode.h"
+#include "../../../gcode/gcode.h" // yn: include gcode
 
 #if ENABLED(DWIN_CREALITY_LCD)
 
@@ -167,6 +167,7 @@ typedef struct {
   bool inc(uint8_t v) { if (now < (v - 1)) now++; else now = (v - 1); return changed(); }
 } select_t;
 
+// yn: add select aux, ztool, refuel
 select_t select_page{0}, select_file{0}, select_print{0}, select_prepare{0}
          , select_control{0}, select_axis{0}, select_aux{0}, select_ztool{0}, select_refuel{0}, select_temp{0}, select_motion{0}, select_tune{0}
          , select_PLA{0}, select_ABS{0}
@@ -176,6 +177,7 @@ select_t select_page{0}, select_file{0}, select_print{0}, select_prepare{0}
          , select_step{0}
          ;
 
+// yn: add aux menu
 uint8_t index_file     = MROWS,
         index_prepare  = MROWS,
         index_aux      = MROWS,
@@ -221,7 +223,7 @@ void HMI_SetLanguage() {
   #if BOTH(EEPROM_SETTINGS, IIC_BL24CXX_EEPROM)
     BL24CXX::read(DWIN_LANGUAGE_EEPROM_ADDRESS, (uint8_t*)&HMI_flag.language, sizeof(HMI_flag.language));
   #endif
-  HMI_flag.language = DWIN_ENGLISH; //Force English
+  HMI_flag.language = DWIN_ENGLISH; // yn: force english
   HMI_SetLanguageCache();
 }
 
@@ -505,9 +507,10 @@ inline bool Apply_Encoder(const ENCODER_DiffState &encoder_diffState, auto &valr
     valref += EncoderRate.encoderMoveValue;
   else if (encoder_diffState == ENCODER_DIFF_CCW)
     valref -= EncoderRate.encoderMoveValue;
-  else if (encoder_diffState == ENCODER_DIFF_ENTER)
-    return true;
-  return false;
+  // else if (encoder_diffState == ENCODER_DIFF_ENTER)
+  //   return true;
+  return encoder_diffState == ENCODER_DIFF_ENTER;
+  //return false;
 }
 
 //
@@ -569,6 +572,7 @@ inline void draw_move_en(const uint16_t line) {
   DWIN_Frame_AreaCopy(1, 69, 61, 102, 71, LBLX, line); // "Move"
 }
 
+// yn: add function for Prepare Aux
 inline void Item_Prepare_AUX(const uint8_t row) {
   if (HMI_IsChinese())
     DWIN_Frame_AreaCopy(1, 159, 70, 271-71, 479-395, LBLX, MBASE(row));
@@ -579,6 +583,7 @@ inline void Item_Prepare_AUX(const uint8_t row) {
   Draw_More_Icon(row);
 }
 
+// yn: add function for Prepare Z Tool
 inline void Item_Prepare_ZTool(const uint8_t row) {
   if (HMI_IsChinese())
     DWIN_Frame_AreaCopy(1, 159, 70, 271-71, 479-395, LBLX, MBASE(row));
@@ -589,6 +594,7 @@ inline void Item_Prepare_ZTool(const uint8_t row) {
   Draw_More_Icon(row);
 }
 
+// yn: add function for Prepare Refuel
 inline void Item_Prepare_Refuel(const uint8_t row) {
   if (HMI_IsChinese())
     DWIN_Frame_AreaCopy(1, 159, 70, 271-71, 479-395, LBLX, MBASE(row));
@@ -720,10 +726,10 @@ inline void Draw_Prepare_Menu() {
   if (PVISI(PREPARE_CASE_HOME)) Item_Prepare_Home(PSCROL(PREPARE_CASE_HOME));     // Auto Home
   #if HAS_ZOFFSET_ITEM
     if (PVISI(PREPARE_CASE_ZOFF)) Item_Prepare_Offset(PSCROL(PREPARE_CASE_ZOFF)); // Edit Z-Offset / Babystep / Set Home Offset
-    if (PVISI(PREPARE_CASE_ZTOOL)) Item_Prepare_ZTool(PSCROL(PREPARE_CASE_ZTOOL));         // Z Tool >
+    if (PVISI(PREPARE_CASE_ZTOOL)) Item_Prepare_ZTool(PSCROL(PREPARE_CASE_ZTOOL));    // yn: Z Tool >
   #endif
-    if (PVISI(PREPARE_CASE_AUX)) Item_Prepare_AUX(PSCROL(PREPARE_CASE_AUX));         // AUX Leveling >
-    if (PVISI(PREPARE_CASE_REFUEL)) Item_Prepare_Refuel(PSCROL(PREPARE_CASE_REFUEL));         // Filament Feed >
+    if (PVISI(PREPARE_CASE_AUX)) Item_Prepare_AUX(PSCROL(PREPARE_CASE_AUX));          // yn: AUX Leveling >
+    if (PVISI(PREPARE_CASE_REFUEL)) Item_Prepare_Refuel(PSCROL(PREPARE_CASE_REFUEL)); // yn: Filament Feed >
   #if HAS_HOTEND
     if (PVISI(PREPARE_CASE_PLA)) Item_Prepare_PLA(PSCROL(PREPARE_CASE_PLA));      // Preheat PLA
     if (PVISI(PREPARE_CASE_ABS)) Item_Prepare_ABS(PSCROL(PREPARE_CASE_ABS));      // Preheat ABS
@@ -1026,6 +1032,7 @@ inline void Draw_Popup_Bkgd_60() {
 
 #endif
 
+// Add function Popup Window Aux
 void Popup_Window_Aux() {
   Clear_Main_Window();
   Draw_Popup_Bkgd_60();
@@ -1220,7 +1227,8 @@ void HMI_Move_X() {
       if (!planner.is_full()) {
         // Wait for planner moves to finish!
         planner.synchronize();
-        planner.buffer_line(current_position, MMM_TO_MMS(HOMING_FEEDRATE_XY), active_extruder);
+        //planner.buffer_line(current_position, MMM_TO_MMS(HOMING_FEEDRATE_XY), active_extruder);
+        planner.buffer_line(current_position, homing_feedrate(X_AXIS), active_extruder);
       }
       DWIN_UpdateLCD();
       return;
@@ -1243,7 +1251,8 @@ void HMI_Move_Y() {
       if (!planner.is_full()) {
         // Wait for planner moves to finish!
         planner.synchronize();
-        planner.buffer_line(current_position, MMM_TO_MMS(HOMING_FEEDRATE_XY), active_extruder);
+        //planner.buffer_line(current_position, MMM_TO_MMS(HOMING_FEEDRATE_XY), active_extruder);
+        planner.buffer_line(current_position, homing_feedrate(Y_AXIS), active_extruder);
       }
       DWIN_UpdateLCD();
       return;
@@ -1266,7 +1275,8 @@ void HMI_Move_Z() {
       if (!planner.is_full()) {
         // Wait for planner moves to finish!
         planner.synchronize();
-        planner.buffer_line(current_position, MMM_TO_MMS(HOMING_FEEDRATE_Z), active_extruder);
+        //planner.buffer_line(current_position, MMM_TO_MMS(HOMING_FEEDRATE_Z), active_extruder);
+        planner.buffer_line(current_position, homing_feedrate(Z_AXIS), active_extruder);
       }
       DWIN_UpdateLCD();
       return;
@@ -1307,6 +1317,7 @@ void HMI_Move_Z() {
     }
   }
 
+  // yn: add function move extruder for refuel
   void HMI_Move_E_Refuel() {
     ENCODER_DiffState encoder_diffState = Encoder_ReceiveAnalyze();
     if (encoder_diffState != ENCODER_DIFF_NO) {
@@ -1333,7 +1344,6 @@ void HMI_Move_Z() {
   void HMI_Zoffset() {
     ENCODER_DiffState encoder_diffState = Encoder_ReceiveAnalyze();
     if (encoder_diffState != ENCODER_DIFF_NO) {
-      last_zoffset = dwin_zoffset;
       uint8_t zoff_line;
       switch (HMI_ValueStruct.show_mode) {
         case -4: zoff_line = PREPARE_CASE_ZOFF + MROWS - index_prepare; break;
@@ -1342,12 +1352,8 @@ void HMI_Move_Z() {
       if (Apply_Encoder(encoder_diffState, HMI_ValueStruct.offset_value)) {
         EncoderRate.enabled = false;
         #if HAS_BED_PROBE
-          TERN_(EEPROM_SETTINGS, settings.save());
-          dwin_zoffset = HMI_ValueStruct.offset_value / 100.0f;
           probe.offset.z = dwin_zoffset;
-            #if EITHER(BABYSTEP_ZPROBE_OFFSET, JUST_BABYSTEP)
-              if (BABYSTEP_ALLOWED()) babystep.add_mm(Z_AXIS, dwin_zoffset - last_zoffset);
-            #endif
+          TERN_(EEPROM_SETTINGS, settings.save());
         #endif
         checkkey = HMI_ValueStruct.show_mode == -4 ? Prepare : Tune;
         DWIN_Draw_Signed_Float(font8x16, Color_Bg_Black, 2, 2, 202, MBASE(zoff_line), TERN(HAS_BED_PROBE, BABY_Z_VAR * 100, HMI_ValueStruct.offset_value));
@@ -1356,6 +1362,11 @@ void HMI_Move_Z() {
       }
       NOLESS(HMI_ValueStruct.offset_value, (Z_PROBE_OFFSET_RANGE_MIN) * 100);
       NOMORE(HMI_ValueStruct.offset_value, (Z_PROBE_OFFSET_RANGE_MAX) * 100);
+      last_zoffset = dwin_zoffset;
+      dwin_zoffset = HMI_ValueStruct.offset_value / 100.0f;
+      #if EITHER(BABYSTEP_ZPROBE_OFFSET, JUST_BABYSTEP)
+        if (BABYSTEP_ALLOWED()) babystep.add_mm(Z_AXIS, dwin_zoffset - last_zoffset);
+      #endif
       DWIN_Draw_Signed_Float(font8x16, Select_Color, 2, 2, 202, MBASE(zoff_line), HMI_ValueStruct.offset_value);
       DWIN_UpdateLCD();
     }
@@ -1363,6 +1374,7 @@ void HMI_Move_Z() {
 
 #endif // HAS_ZOFFSET_ITEM
 
+// yn: add zoffset tool
 void HMI_ZoffsetRT() {
   ENCODER_DiffState encoder_diffState = Encoder_ReceiveAnalyze();
   char gcode_string[80];
@@ -1393,8 +1405,6 @@ void HMI_ZoffsetRT() {
     DWIN_UpdateLCD();
   }
 }
-
-
 
 #if HAS_HOTEND
 
@@ -1794,7 +1804,8 @@ inline void Draw_SDItem(const uint16_t item, int16_t row=-1) {
     return;
   }
 
-  card.getfilename_sorted(item - is_subdir);
+  //card.getfilename_sorted(item - is_subdir);
+  card.getfilename_sorted(SD_ORDER(item - is_subdir, card.get_num_Files()));
   char * const name = card.longest_filename();
 
   #if ENABLED(SCROLL_LONG_FILENAMES)
@@ -2365,7 +2376,7 @@ void HMI_AudioFeedback(const bool success=true) {
     buzzer.tone(40, 440);
 }
 
-
+// yn: add function draw ztool menu
 inline void Draw_ZTool_Menu() {
   Clear_Main_Window();
   Draw_Title("Z Tool [Smith3D.com]"); // TODO: GET_TEXT_F
@@ -2384,7 +2395,7 @@ inline void Draw_ZTool_Menu() {
   LOOP_L_N(i, 2) Draw_Menu_Line(i + 1, ICON_SetHome);
 }
 
-
+// yn: add function draw refuel menu
 inline void Draw_Refuel_Menu() {
   Clear_Main_Window();
   Draw_Title("Refuel [Smith3D.com]"); // TODO: GET_TEXT_F
@@ -2399,6 +2410,7 @@ inline void Draw_Refuel_Menu() {
   LOOP_L_N(i, 3) Draw_Menu_Line(i + 1, ICON_SetHome);
 }
 
+// yn: add function draw aux menu
 inline void Draw_AUX_Menu() {
   Clear_Main_Window();
 

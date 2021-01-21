@@ -122,6 +122,7 @@
  *
  * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
  */
+//#define BAUDRATE 115200
 #define BAUDRATE 115200
 
 // Enable the Bluetooth serial interface on AT90USB devices
@@ -516,9 +517,13 @@
     // Recv: #define DEFAULT_Kd 94.78
     // Use M500 to save
 
-    #define DEFAULT_Kp 36.65
-    #define DEFAULT_Ki 3.54
-    #define DEFAULT_Kd 94.78
+    // Recv: echo:; PID settings:
+
+    // Recv: echo:  M301 P32.83 I3.28 D82.24
+
+    #define DEFAULT_Kp 32.83
+    #define DEFAULT_Ki 3.28
+    #define DEFAULT_Kd 82.24
 
   #endif
 #endif // PIDTEMP
@@ -569,10 +574,11 @@
   // Recv: #define DEFAULT_bedKi 16.84
   // Recv: #define DEFAULT_bedKd 323.94
   // Use M500 to save
+  // Recv: echo:  M304 P98.39 I18.59 D347.07
 
-  #define DEFAULT_bedKp 90.45
-  #define DEFAULT_bedKi 16.84
-  #define DEFAULT_bedKd 323.94
+  #define DEFAULT_bedKp 98.39
+  #define DEFAULT_bedKi 18.59
+  #define DEFAULT_bedKd 347.07
 
 #endif // PIDTEMPBED
 
@@ -2546,15 +2552,15 @@
 // Support for Adafruit NeoPixel LED driver
 #define NEOPIXEL_LED
 #if ENABLED(NEOPIXEL_LED)
-  #define NEOPIXEL_TYPE   NEO_GRB // NEO_GRBW / NEO_GRB - four/three channel driver type (defined in Adafruit_NeoPixel.h)
-  //#define NEOPIXEL_PIN     4       // LED driving pin
+  #define NEOPIXEL_TYPE NEO_GRB // NEO_GRBW / NEO_GRB - four/three channel driver type (defined in Adafruit_NeoPixel.h)
+  #define NEOPIXEL_PIN PA8      // LED driving pin
   //#define NEOPIXEL2_TYPE NEOPIXEL_TYPE
   //#define NEOPIXEL2_PIN    5
   //#define NEOPIXEL2_PIN    P1_2
   #define NEOPIXEL_PIXELS 10       // Number of LEDs in the strip. (Longest strip when NEOPIXEL2_SEPARATE is disabled.)
-  #define NEOPIXEL_IS_SEQUENTIAL   // Sequential display for temperature change - LED by LED. Disable to change all LEDs at once.
-  #define NEOPIXEL_BRIGHTNESS 127  // Initial brightness (0-255)
-  #define NEOPIXEL_STARTUP_TEST  // Cycle through colors at startup
+  //#define NEOPIXEL_IS_SEQUENTIAL // Sequential display for temperature change - LED by LED. Disable to change all LEDs at once.
+  #define NEOPIXEL_BRIGHTNESS 64   // Initial brightness (0-255)
+  #define NEOPIXEL_STARTUP_TEST    // Cycle through colors at startup
 
   // Support for second Adafruit NeoPixel LED driver controlled with M150 S1 ...
   //#define NEOPIXEL2_SEPARATE
