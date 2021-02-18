@@ -511,19 +511,20 @@
 
     // Ender 3 V2 with Hemera Hotend Heater
     // PID Autotune command: M303 C8 [E0] S200 U1
+    // Recv:  Kp: 28.64 Ki: 2.33 Kd: 87.82
     // Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
-    // Recv: #define DEFAULT_Kp 36.65
-    // Recv: #define DEFAULT_Ki 3.54
-    // Recv: #define DEFAULT_Kd 94.78
+    // Recv: #define DEFAULT_Kp 28.64
+    // Recv: #define DEFAULT_Ki 2.33
+    // Recv: #define DEFAULT_Kd 87.82
     // Use M500 to save
 
     // Recv: echo:; PID settings:
 
     // Recv: echo:  M301 P32.83 I3.28 D82.24
 
-    #define DEFAULT_Kp 32.83
-    #define DEFAULT_Ki 3.28
-    #define DEFAULT_Kd 82.24
+    #define DEFAULT_Kp 28.64
+    #define DEFAULT_Ki 2.33
+    #define DEFAULT_Kd 87.82
 
   #endif
 #endif // PIDTEMP
