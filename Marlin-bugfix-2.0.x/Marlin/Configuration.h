@@ -511,20 +511,15 @@
 
     // Ender 3 V2 with Hemera Hotend Heater
     // PID Autotune command: M303 C8 [E0] S200 U1
-    // Recv:  Kp: 28.64 Ki: 2.33 Kd: 87.82
     // Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
-    // Recv: #define DEFAULT_Kp 28.64
-    // Recv: #define DEFAULT_Ki 2.33
-    // Recv: #define DEFAULT_Kd 87.82
+    // Recv: #define DEFAULT_Kp 30.61
+    // Recv: #define DEFAULT_Ki 2.19
+    // Recv: #define DEFAULT_Kd 106.77
     // Use M500 to save
 
-    // Recv: echo:; PID settings:
-
-    // Recv: echo:  M301 P32.83 I3.28 D82.24
-
-    #define DEFAULT_Kp 28.64
-    #define DEFAULT_Ki 2.33
-    #define DEFAULT_Kd 87.82
+    #define DEFAULT_Kp 30.61
+    #define DEFAULT_Ki 2.19
+    #define DEFAULT_Kd 106.77
 
   #endif
 #endif // PIDTEMP
@@ -1038,14 +1033,16 @@
  */
 
 // Hydra Fan Duct
-#define NOZZLE_TO_PROBE_OFFSET { 70, 3, 0 }
+#define NOZZLE_TO_PROBE_OFFSET { 71, 0, 0 }
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
 #define PROBING_MARGIN 10
 
 // X and Y axis travel speed (mm/min) between probes
-#define XY_PROBE_SPEED (133*60)
+// #define XY_PROBE_SPEED (133*60)
+// speed up to 12000 mm/min
+#define XY_PROBE_SPEED (200*60)
 
 // Feedrate (mm/min) for the first approach when double-probing (MULTIPLE_PROBING == 2)
 #define Z_PROBE_SPEED_FAST HOMING_FEEDRATE_Z
@@ -1176,7 +1173,7 @@
 // The size of the print bed
 // Ender 3 V2 printable bed size
 #define X_BED_SIZE 220
-#define Y_BED_SIZE 216 // 235 - MANUAL_Y_HOME_POS - 5 = 235-14-5=216
+#define Y_BED_SIZE 211 // 235 - MANUAL_Y_HOME_POS - 5 = 235-19-5=220
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
 #define X_MIN_POS 0
@@ -1488,7 +1485,7 @@
 
 //Hemera Extruder offset
 #define MANUAL_X_HOME_POS -18
-#define MANUAL_Y_HOME_POS -14
+#define MANUAL_Y_HOME_POS -19
 
 
 
